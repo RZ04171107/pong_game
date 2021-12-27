@@ -9,6 +9,8 @@ FLOOR_YCOR = -280
 PADDLE_DIS_MAX = 50
 PADDLE_HIT_XCOR_R = 320
 PADDLE_HIT_XCOR_L = -320
+BOUND_L = -380
+BOUND_R = 380
 
 screen = Screen()
 paddle_right = Paddle(350)
@@ -37,8 +39,17 @@ while game_is_on:
         ball.bounce_y()
 
     # Detect collision with paddles
-    if ball.distance(paddle_right) < PADDLE_DIS_MAX and ball.xcor() > PADDLE_HIT_XCOR_R or ball.distance(paddle_left) and ball.xcor() < PADDLE_HIT_XCOR_L:
+    if ball.distance(paddle_right) < PADDLE_DIS_MAX and ball.xcor() > PADDLE_HIT_XCOR_R or ball.distance(
+            paddle_left) < PADDLE_DIS_MAX and ball.xcor() < PADDLE_HIT_XCOR_L:
         ball.bounce_x()
 
+    # Detect paddles misses
+    # If yes, reset the ball's position to the center of the screen.
+    # The ball should then start moving towards the other player.
+    if ball.xcor() > BOUND_R:
+        ball.reset_position()
+
+    if ball.xcor() < BOUND_L:
+        ball.reset_position()
 
 screen.exitonclick()
